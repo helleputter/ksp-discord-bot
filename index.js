@@ -2,7 +2,7 @@ import DiscordJS, { Intents } from 'discord.js'
 import https from 'https'
 import config from './config.json' assert { type:"json"};
 
-let url = config.steam_users_url+config.steam_id+'&steamids='
+let url = config.steam_users_url+config.steam_token+'&steamids='
 for (let i= 0; i < config['collab-players'].length; i++) {
     url += config['collab-players'][i]['steamid']+',';
 }
