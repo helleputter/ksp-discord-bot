@@ -23,6 +23,7 @@ const client = new DiscordJS.Client({
 
 client.on('ready', () => {
     console.log('bot is ready')
+    client.user.setActivity('reboot the game');
 })
 
 
@@ -45,7 +46,6 @@ const seconds = 5, the_interval = seconds * 1000;
 setInterval(function() {
     
     const channel = client.channels.cache.get(config['ksp-channel']);
-	console.log('I am doing my 5 seconds check');
     https.get(url,(res) => {
         let body = "";
     
@@ -68,21 +68,18 @@ setInterval(function() {
                 }
                 if (PreviousAmount != DiscordIds.length) {
                     OnlyOnce = false;
-                }
-                else if (LastPlaying.length === 0) {
-                    OnlyOnce = true;
+                    if (DiscordIds.length != 0){
+                        client.user.setStatus('dnd');
+                        client.user.setActivity('KSP with ' + DiscordIds.length + ' kerbonauts' , { type: 'PLAYING' });
+                    }
                 }
                 PreviousAmount =  DiscordIds.length;
                 if (!OnlyOnce){
                     switch(DiscordIds.length) {
                         case 0:
                             OnlyOnce = true;
-                            channel.send(LastPlaying.join()+' has stopped playing KSP')
-                            break;
-                        case 1:
-                            channel.send(DiscordIds.join()+' is playing ksp')
-                            LastPlaying = DiscordIds;
-                            OnlyOnce = true;
+                            client.user.setStatus('online');
+                            client.user.setActivity('an empty kerbol' , { type: 'WATCHING' });
                             break;
                         case 2:
                             OnlyOnce = true;
@@ -90,9 +87,11 @@ setInterval(function() {
                             channel.send('Watch out '+DiscordIds.join()+' you are both playing KSP')
                             break;
                         default:
-                            OnlyOnce = true;
-                            LastPlaying = DiscordIds;
-                            channel.send('Watch out '+DiscordIds.join()+' all of you are playing KSP')
+                            if (DiscordIds.length > 2) {
+                                OnlyOnce = true;
+                                LastPlaying = DiscordIds;
+                                channel.send('Watch out '+DiscordIds.join()+' all of you are playing KSP')
+                            }
                             break;
                     }
                 }
