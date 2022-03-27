@@ -41,11 +41,11 @@ let OnlyOnce = false;
 let PreviousAmount = 0;
 let LastPlaying = [];
 
-const minutes = 0.1, the_interval = minutes * 60 * 1000;
+const seconds = 5, the_interval = seconds * 1000;
 setInterval(function() {
     
     const channel = client.channels.cache.get(config['ksp-channel']);
-	console.log('I am doing my 1 minutes check');
+	console.log('I am doing my 5 seconds check');
     https.get(url,(res) => {
         let body = "";
     
